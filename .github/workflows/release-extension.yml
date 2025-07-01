@@ -34,7 +34,7 @@ jobs:
 
       - name: Setup semantic-release
         run: |
-          pnpm add -D semantic-release @semantic-release/exec
+          pnpm add -D semantic-release @semantic-release/git @semantic-release/exec
 
       - name: Install extension dependencies
         run: |
