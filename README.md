@@ -2,7 +2,7 @@
 
 Enhance your shared music links with beautiful OGP images.
 
-![Enhanced NowPlaying](./docs/images/logo.png)
+<img src="./docs/images/logo.png" alt="Enhanced NowPlaying" style="max-width: 200px; margin-bottom: 16px;"/>
 
 [![GitHub release](https://img.shields.io/github/v/release/mimifuwa/enhanced-nowplaying)](https://github.com/mimifuwa/enhanced-nowplaying/releases)
 [![GitHub stars](https://img.shields.io/github/stars/mimifuwa/enhanced-nowplaying)](https://github.com/mimifuwa/enhanced-nowplaying/stargazers)
