@@ -39,6 +39,11 @@ jobs:
         run: |
           pnpm add -D semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/exec
 
+      - name: Install extension dependencies
+        run: |
+          cd packages/extension
+          pnpm install
+
       - name: Build extension
         run: |
           cd packages/extension
