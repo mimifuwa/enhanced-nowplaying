@@ -5,7 +5,7 @@
   "framework": "nextjs",
   "regions": ["hnd1"],
   "functions": {
-    "packages/api/src/app/api/**/*.{js,ts}": {
+    "src/app/api/**/*.{js,ts}": {
       "maxDuration": 10
     }
   }
