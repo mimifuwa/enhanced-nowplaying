@@ -13,7 +13,9 @@ interface VideoData {
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const url = decodeURIComponent(searchParams.get("url") || "");
+  const url = searchParams.get("url");
+
+  console.log(url);
 
   if (!url) {
     return new Response("URL parameter is required", { status: 400 });

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import Redirect from './redirect';
 
 interface VideoData {
   title: string;
@@ -117,32 +117,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   // slugをデコードしてYouTube URLを取得
   const youtubeMusicUrl = decodeURIComponent(slug);
   
-  // YouTube Music URLにリダイレクト
-  redirect(youtubeMusicUrl);
-  
-  // フォールバック表示（通常は表示されない）
-  return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100vh',
-      fontFamily: 'system-ui, sans-serif',
-      backgroundColor: '#1a1a1a',
-      color: 'white'
-    }}>
-      <div style={{ marginBottom: '20px' }}>
-        <div style={{
-          width: '40px',
-          height: '40px',
-          border: '4px solid #333',
-          borderTop: '4px solid #fff',
-          borderRadius: '50%',
-          animation: 'spin 1s linear infinite'
-        }} />
-      </div>
-      <p>Redirecting to YouTube Music...</p>
-    </div>
-  );
+  // クライアントサイドでYouTube Music URLにリダイレクト
+  return <Redirect url={youtubeMusicUrl} />;
 }
