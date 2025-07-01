@@ -32,28 +32,33 @@ A Next.js application that generates beautiful OG images for YouTube Music track
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd enhanced-nowplaying
 ```
 
 2. Install dependencies:
+
 ```bash
 pnpm install
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp .env.example .env.local
 ```
 
 Add your environment variables:
+
 ```env
 YOUTUBE_DATA_API_KEY=your_youtube_api_key
 BASE_URL=http://localhost:3000
 ```
 
 4. Run the development server:
+
 ```bash
 pnpm dev
 ```
@@ -65,6 +70,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### Generate OG Image
 
 Make a GET request to the API endpoint:
+
 ```
 /api/nowplaying?url=<youtube_music_url>
 ```
@@ -72,11 +78,13 @@ Make a GET request to the API endpoint:
 ### Share with Metadata
 
 Create a shareable URL:
+
 ```
 /<encoded_youtube_music_url>
 ```
 
 The app will:
+
 1. Extract video information from YouTube
 2. Generate custom OG metadata
 3. Redirect to the original YouTube Music URL
@@ -88,9 +96,11 @@ The app will:
 Generates an OG image for a YouTube Music track.
 
 **Parameters:**
+
 - `url` (required): YouTube Music URL
 
 **Response:**
+
 - Content-Type: `image/png`
 - Cache-Control: `public, max-age=3600`
 
@@ -149,28 +159,33 @@ YouTube Musicの楽曲用に美しいOG画像を生成し、メタデータ付�
 ### インストール
 
 1. リポジトリをクローン:
+
 ```bash
 git clone <repository-url>
 cd enhanced-nowplaying
 ```
 
 2. 依存関係をインストール:
+
 ```bash
 pnpm install
 ```
 
 3. 環境変数を設定:
+
 ```bash
 cp .env.example .env.local
 ```
 
 環境変数を追加:
+
 ```env
 YOUTUBE_DATA_API_KEY=your_youtube_api_key
 BASE_URL=http://localhost:3000
 ```
 
 4. 開発サーバーを起動:
+
 ```bash
 pnpm dev
 ```
@@ -182,6 +197,7 @@ pnpm dev
 ### OG画像を生成
 
 APIエンドポイントにGETリクエストを送信:
+
 ```
 /api/nowplaying?url=<youtube_music_url>
 ```
@@ -189,11 +205,13 @@ APIエンドポイントにGETリクエストを送信:
 ### メタデータ付きで共有
 
 共有可能なURLを作成:
+
 ```
 /<encoded_youtube_music_url>
 ```
 
 アプリは以下を実行します:
+
 1. YouTubeから動画情報を抽出
 2. カスタムOGメタデータを生成
 3. 元のYouTube Music URLにリダイレクト
@@ -205,9 +223,11 @@ APIエンドポイントにGETリクエストを送信:
 YouTube Musicトラック用のOG画像を生成します。
 
 **パラメータ:**
+
 - `url`（必須）: YouTube Music URL
 
 **レスポンス:**
+
 - Content-Type: `image/png`
 - Cache-Control: `public, max-age=3600`
 

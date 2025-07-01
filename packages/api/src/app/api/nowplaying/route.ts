@@ -34,14 +34,8 @@ export async function GET(request: NextRequest) {
     }
 
     // フォントを読み込み
-    const fontPath = path.join(
-      process.cwd(),
-      "public/fonts/NotoSansJP-Regular.ttf"
-    );
-    const boldFontPath = path.join(
-      process.cwd(),
-      "public/fonts/NotoSansJP-Bold.ttf"
-    );
+    const fontPath = path.join(process.cwd(), "public/fonts/NotoSansJP-Regular.ttf");
+    const boldFontPath = path.join(process.cwd(), "public/fonts/NotoSansJP-Bold.ttf");
 
     const fonts = [
       {
@@ -306,10 +300,7 @@ async function convertSvgToPng(svg: string): Promise<Buffer> {
       return pngBuffer;
     }
 
-    const croppedBuffer = await image
-      .extract({ left, top, width, height })
-      .png()
-      .toBuffer();
+    const croppedBuffer = await image.extract({ left, top, width, height }).png().toBuffer();
 
     return croppedBuffer;
   } catch (error) {

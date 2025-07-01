@@ -1,13 +1,12 @@
 {
-  "name": "enhanced-nowplaying",
+  "name": "api",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.12.1",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "fix": "eslint . --fix"
   },
   "dependencies": {
     "cheerio": "^1.1.0",
@@ -25,7 +24,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "tailwindcss": "^4"
   }
 }

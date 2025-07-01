@@ -1,27 +1,24 @@
-import React, { useState } from "react"
+import React from "react";
 
 const EnhancedNowPlayingButton: React.FC = () => {
   const handleClick = () => {
     const playerTitleLink = document.querySelector(
       'a[data-sessionlink*="feature=player-title"]'
-    ) as HTMLAnchorElement
+    ) as HTMLAnchorElement;
     if (playerTitleLink?.href) {
-      const urlParams = new URLSearchParams(playerTitleLink.href.split("?")[1])
-      const videoId = urlParams.get("v")
+      const urlParams = new URLSearchParams(playerTitleLink.href.split("?")[1]);
+      const videoId = urlParams.get("v");
       if (videoId) {
         // vパラメータのみを使用し、余計なパラメータは除外
-        const cleanVideoId = videoId.split("&")[0]
-        const urlToShare = `https://music.youtube.com/watch?v=${cleanVideoId}`
-        const shareUrl = `https://nowplaying.mimifuwa.cc/${encodeURIComponent(urlToShare)}`
-        const shareText = `#NowPlaying ${shareUrl}`
+        const cleanVideoId = videoId.split("&")[0];
+        const urlToShare = `https://music.youtube.com/watch?v=${cleanVideoId}`;
+        const shareUrl = `https://nowplaying.mimifuwa.cc/${encodeURIComponent(urlToShare)}`;
+        const shareText = `#NowPlaying ${shareUrl}`;
 
-        window.open(
-          `https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}`,
-          "_blank"
-        )
+        window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}`, "_blank");
       }
     }
-  }
+  };
 
   return (
     <div
@@ -29,8 +26,9 @@ const EnhancedNowPlayingButton: React.FC = () => {
         display: "flex",
         width: "100%",
         padding: "16px",
-        boxSizing: "border-box"
-      }}>
+        boxSizing: "border-box",
+      }}
+    >
       <button
         onClick={handleClick}
         style={{
@@ -47,8 +45,9 @@ const EnhancedNowPlayingButton: React.FC = () => {
           position: "relative",
           overflow: "hidden",
           boxSizing: "border-box",
-          textDecoration: "none"
-        }}>
+          textDecoration: "none",
+        }}
+      >
         <div
           style={{
             width: "28px",
@@ -59,8 +58,9 @@ const EnhancedNowPlayingButton: React.FC = () => {
             justifyContent: "center",
             background: "rgba(255, 255, 255, 0.2)",
             borderRadius: "8px",
-            backdropFilter: "blur(10px)"
-          }}>
+            backdropFilter: "blur(10px)",
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="20"
@@ -70,8 +70,9 @@ const EnhancedNowPlayingButton: React.FC = () => {
             aria-hidden="true"
             style={{
               fill: "#fff",
-              display: "block"
-            }}>
+              display: "block",
+            }}
+          >
             <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z" />
           </svg>
         </div>
@@ -82,10 +83,10 @@ const EnhancedNowPlayingButton: React.FC = () => {
               fontWeight: "600",
               lineHeight: "20px",
               color: "#fff",
-              fontFamily:
-                "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-              letterSpacing: "0.3px"
-            }}>
+              fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+              letterSpacing: "0.3px",
+            }}
+          >
             Now Playing
           </span>
         </div>
@@ -93,22 +94,24 @@ const EnhancedNowPlayingButton: React.FC = () => {
           style={{
             marginLeft: "12px",
             opacity: 0.7,
-            transition: "opacity 0.3s ease"
-          }}>
+            transition: "opacity 0.3s ease",
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="16"
             viewBox="0 0 24 24"
             width="16"
             style={{
-              fill: "#fff"
-            }}>
+              fill: "#fff",
+            }}
+          >
             <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
           </svg>
         </div>
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default EnhancedNowPlayingButton
+export default EnhancedNowPlayingButton;

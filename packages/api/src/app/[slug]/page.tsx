@@ -1,5 +1,5 @@
-import { Metadata } from 'next';
-import Redirect from './redirect';
+import { Metadata } from "next";
+import Redirect from "./redirect";
 
 interface VideoData {
   title: string;
@@ -26,33 +26,35 @@ function extractVideoId(url: string): string | null {
 async function fetchVideoData(videoId: string): Promise<VideoData> {
   const apiKey = process.env.YOUTUBE_DATA_API_KEY;
   if (!apiKey) {
-    throw new Error('YouTube Data API key is not configured');
+    throw new Error("YouTube Data API key is not configured");
   }
 
   const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${apiKey}&part=snippet`;
-  
+
   const response = await fetch(apiUrl);
   if (!response.ok) {
     throw new Error(`YouTube API request failed: ${response.status}`);
   }
 
   const data = await response.json();
-  
+
   if (!data.items || data.items.length === 0) {
-    throw new Error('Video not found');
+    throw new Error("Video not found");
   }
 
   const video = data.items[0];
   const snippet = video.snippet;
 
   return {
-    title: snippet.title || 'Unknown Title',
-    channelTitle: snippet.channelTitle || 'Unknown Artist',
-    thumbnail: snippet.thumbnails?.maxres?.url || 
-               snippet.thumbnails?.high?.url || 
-               snippet.thumbnails?.medium?.url || 
-               snippet.thumbnails?.default?.url || '',
-    description: snippet.description || '',
+    title: snippet.title || "Unknown Title",
+    channelTitle: snippet.channelTitle || "Unknown Artist",
+    thumbnail:
+      snippet.thumbnails?.maxres?.url ||
+      snippet.thumbnails?.high?.url ||
+      snippet.thumbnails?.medium?.url ||
+      snippet.thumbnails?.default?.url ||
+      "",
+    description: snippet.description || "",
   };
 }
 
@@ -67,16 +69,16 @@ export async function generateMetadata({
     // slugをデコードしてYouTube URLを取得
     const youtubeMusicUrl = decodeURIComponent(slug);
     const videoId = extractVideoId(youtubeMusicUrl);
-    
+
     if (!videoId) {
       return {
-        title: 'Invalid YouTube Music URL',
-        description: 'The provided URL is not a valid YouTube Music URL.',
+        title: "Invalid YouTube Music URL",
+        description: "The provided URL is not a valid YouTube Music URL.",
       };
     }
 
     const videoData = await fetchVideoData(videoId);
-    const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.BASE_URL || "http://localhost:3000";
     const ogImageUrl = `${baseUrl}/api/nowplaying?url=${encodeURIComponent(youtubeMusicUrl)}`;
 
     return {
@@ -93,20 +95,20 @@ export async function generateMetadata({
             alt: `${videoData.title} by ${videoData.channelTitle}`,
           },
         ],
-        type: 'website',
+        type: "website",
       },
       twitter: {
-        card: 'summary_large_image',
+        card: "summary_large_image",
         title: `${videoData.title} - ${videoData.channelTitle}`,
         description: `Now Playing: ${videoData.title} by ${videoData.channelTitle}`,
         images: [ogImageUrl],
       },
     };
   } catch (error) {
-    console.error('Error generating metadata:', error);
+    console.error("Error generating metadata:", error);
     return {
-      title: 'Error loading song',
-      description: 'Failed to load the YouTube Music track.',
+      title: "Error loading song",
+      description: "Failed to load the YouTube Music track.",
     };
   }
 }
@@ -116,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { slug } = await params;
   // slugをデコードしてYouTube URLを取得
   const youtubeMusicUrl = decodeURIComponent(slug);
-  
+
   // クライアントサイドでYouTube Music URLにリダイレクト
   return <Redirect url={youtubeMusicUrl} />;
 }
