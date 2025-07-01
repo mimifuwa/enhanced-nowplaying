@@ -15,8 +15,6 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const url = searchParams.get("url");
 
-  console.log(url);
-
   if (!url) {
     return new Response("URL parameter is required", { status: 400 });
   }
@@ -28,7 +26,6 @@ export async function GET(request: NextRequest) {
     }
 
     const videoData = await fetchVideoData(videoId);
-    console.log("Video Data:", videoData);
 
     // 画像がない場合はデフォルト画像を使用
     if (!videoData.thumbnail) {
@@ -217,8 +214,8 @@ export async function GET(request: NextRequest) {
         )
       ),
       {
-        width: 1200,
-        height: 630,
+        width: 1240,
+        height: 670,
         fonts,
       }
     );
@@ -291,9 +288,30 @@ async function convertSvgToPng(svg: string): Promise<Buffer> {
   const sharp = (await import("sharp")).default;
 
   try {
+    // まずSVGをPNGに変換
     const pngBuffer = await sharp(Buffer.from(svg)).png().toBuffer();
 
-    return pngBuffer;
+    // PNG画像のメタデータを取得
+    const image = sharp(pngBuffer);
+    const metadata = await image.metadata();
+
+    // 20pxずつ切り抜く
+    const left = 20;
+    const top = 20;
+    const width = (metadata.width ?? 0) - 40;
+    const height = (metadata.height ?? 0) - 40;
+
+    // 幅・高さが40px未満の場合はそのまま返す
+    if (width <= 0 || height <= 0) {
+      return pngBuffer;
+    }
+
+    const croppedBuffer = await image
+      .extract({ left, top, width, height })
+      .png()
+      .toBuffer();
+
+    return croppedBuffer;
   } catch (error) {
     console.error("Error converting SVG to PNG:", error);
     throw error;
