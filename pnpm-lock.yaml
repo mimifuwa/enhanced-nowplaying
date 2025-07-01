@@ -6,23 +6,22 @@ settings:
 
 importers:
   .:
-    dependencies:
+    devDependencies:
       "@commitlint/cli":
         specifier: ^19.8.1
         version: 19.8.1(@types/node@24.0.8)(typescript@5.3.3)
       "@commitlint/config-conventional":
         specifier: ^19.8.1
         version: 19.8.1
-      typescript:
-        specifier: 5.3.3
-        version: 5.3.3
-    devDependencies:
       lefthook:
         specifier: ^1.11.14
         version: 1.11.14
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
+      typescript:
+        specifier: 5.3.3
+        version: 5.3.3
 
 packages:
   "@babel/code-frame@7.27.1":

@@ -9,12 +9,10 @@
     "fix": "prettier --write . && pnpm api fix && pnpm extension fix"
   },
   "devDependencies": {
-    "lefthook": "^1.11.14",
-    "prettier": "^3.6.2"
-  },
-  "dependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
+    "lefthook": "^1.11.14",
+    "prettier": "^3.6.2",
     "typescript": "5.3.3"
   }
 }
