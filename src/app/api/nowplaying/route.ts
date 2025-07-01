@@ -122,95 +122,96 @@ export async function GET(request: NextRequest) {
               objectFit: "cover",
             },
           }),
-          React.createElement("div", {
-            style: {
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              justifyContent: "center",
-              color: "#ffffff",
-              width: "506px",
-              gap: "8px",
+          React.createElement(
+            "div",
+            {
+              style: {
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                justifyContent: "center",
+                color: "#ffffff",
+                width: "506px",
+                gap: "8px",
+              },
             },
-            children: [
-              React.createElement(
-                "h1",
-                {
-                  style: {
-                    fontSize: "56px",
-                    fontWeight: 700,
-                    width: "100%",
-                    display: "-webkit-box",
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    WebkitLineClamp: 2,
-                  },
+            React.createElement(
+              "h1",
+              {
+                style: {
+                  fontSize: "56px",
+                  fontWeight: 700,
+                  width: "100%",
+                  display: "-webkit-box",
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  WebkitLineClamp: 2,
                 },
-                videoData.title
-              ),
+              },
+              videoData.title
+            ),
+            React.createElement(
+              "p",
+              {
+                style: {
+                  fontSize: "32px",
+                  color: "#dddddd",
+                  textAlign: "center",
+                  marginTop: "0",
+                  marginBottom: "32px",
+                },
+              },
+              videoData.channelTitle
+            ),
+            React.createElement(
+              "p",
+              {
+                style: {
+                  fontSize: "24px",
+                  color: "#555555",
+                  textAlign: "center",
+                  marginTop: "0",
+                  marginBottom: "32px",
+                  padding: "4px 8px",
+                  borderRadius: "8px",
+                  backgroundColor: "rgba(255, 255, 255, 0.8)",
+                },
+              },
+              "#NowPlaying"
+            ),
+            React.createElement(
+              "div",
+              {
+                style: {
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  color: "#ffffff",
+                },
+              },
+              React.createElement("img", {
+                src: `${process.env.BASE_URL}/icons/yt.svg`,
+                alt: "#NowPlaying",
+                style: {
+                  width: "56px",
+                  height: "56px",
+                },
+              }),
               React.createElement(
                 "p",
                 {
                   style: {
-                    fontSize: "32px",
-                    color: "#dddddd",
+                    fontSize: "20px",
                     textAlign: "center",
-                    marginTop: "0",
-                    marginBottom: "32px",
+                    marginLeft: "10px",
                   },
                 },
-                videoData.channelTitle
-              ),
-              React.createElement(
-                "p",
-                {
-                  style: {
-                    fontSize: "24px",
-                    color: "#555555",
-                    textAlign: "center",
-                    marginTop: "0",
-                    marginBottom: "32px",
-                    padding: "4px 8px",
-                    borderRadius: "8px",
-                    backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  },
-                },
-                "#NowPlaying"
-              ),
-              React.createElement(
-                "div",
-                {
-                  style: {
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                    color: "#ffffff",
-                  },
-                },
-                React.createElement("img", {
-                  src: `${process.env.BASE_URL}/icons/yt.svg`,
-                  alt: "#NowPlaying",
-                  style: {
-                    width: "56px",
-                    height: "56px",
-                  },
-                }),
-                React.createElement(
-                  "p",
-                  {
-                    style: {
-                      fontSize: "20px",
-                      textAlign: "center",
-                      marginLeft: "10px",
-                    },
-                  },
-                  "from YouTube Music"
-                )
-              ),
-            ],
-          })
+                "from YouTube Music"
+              )
+            )
+          )
         )
       ),
       {
