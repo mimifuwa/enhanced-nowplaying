@@ -1,18 +1,12 @@
 {
-  "buildCommand": "pnpm build",
-  "outputDirectory": ".next",
+  "buildCommand": "cd ../.. && pnpm --filter=api build",
+  "outputDirectory": "packages/api/.next",
   "installCommand": "pnpm install",
   "framework": "nextjs",
   "regions": ["hnd1"],
   "functions": {
-    "src/app/api/**/*.{js,ts}": {
+    "packages/api/src/app/api/**/*.{js,ts}": {
       "maxDuration": 10
     }
-  },
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/$1"
-    }
-  ]
+  }
 }
