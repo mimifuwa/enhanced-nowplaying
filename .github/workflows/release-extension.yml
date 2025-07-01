@@ -21,20 +21,20 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
       - name: Install dependencies
         run: |
           cd packages/extension
-          npm install
-
-      - name: Update version
-        run: |
-          cd packages/extension
-          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+          pnpm install
 
       - name: Build extension
         run: |
           cd packages/extension
-          npm run build
+          pnpm run build
 
       - name: Create ZIP
         run: |
