@@ -37,7 +37,7 @@ export default function Redirect({ url }: RedirectProps) {
           }}
         />
       </div>
-      <p>Redirecting to YouTube Music...</p>
+      <p>Redirecting...</p>
       <style jsx>{`
         @keyframes spin {
           0% {
