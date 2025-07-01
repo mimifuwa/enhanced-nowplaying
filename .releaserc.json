@@ -1,13 +1,38 @@
 {
   "branches": ["main"],
   "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "angular",
+        "releaseRules": [
+          { "scope": "extension", "type": "feat", "release": "minor" },
+          { "scope": "extension", "type": "fix", "release": "patch" },
+          { "scope": "extension", "type": "perf", "release": "patch" },
+          { "scope": "extension", "type": "chore", "release": false },
+          { "scope": "extension", "type": "docs", "release": false },
+          { "scope": "extension", "type": "style", "release": false },
+          { "scope": "extension", "type": "refactor", "release": false },
+          { "scope": "extension", "type": "test", "release": false },
+          { "scope": "extension", "breaking": true, "release": "major" },
+          { "scope": "!extension", "release": false }
+        ]
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "angular",
+        "writerOpts": {
+          "commitsFilter": "commit => commit.scope === 'extension'"
+        }
+      }
+    ],
     "@semantic-release/changelog",
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "cd packages/extension && npm version ${nextRelease.version} --no-git-tag-version && cd ../.. && cd packages/extension/build && zip -r ../enhanced-nowplaying-v${nextRelease.version}.zip ."
+        "prepareCmd": "cd packages/extension && pnpm version ${nextRelease.version} --no-git-tag-version && cd ../.. && cd packages/extension/build && zip -r ../enhanced-nowplaying-v${nextRelease.version}.zip ."
       }
     ],
     [
