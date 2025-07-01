@@ -1,7 +1,7 @@
 {
   "buildCommand": "cd ../.. && pnpm --filter=api build",
   "outputDirectory": "packages/api/.next",
-  "installCommand": "pnpm install",
+  "installCommand": "cd ../.. && pnpm --filter=api install",
   "framework": "nextjs",
   "regions": ["hnd1"],
   "functions": {
