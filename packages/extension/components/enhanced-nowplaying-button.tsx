@@ -16,7 +16,7 @@ const EnhancedNowPlayingButton: React.FC<EnhancedNowPlayingButtonProps> = ({
       // h1タグを子孫に持つaタグのhrefからtrack IDを取得
       const linkWithH1 = document.querySelector<HTMLAnchorElement>("a:has(h1)");
       if (linkWithH1?.href) {
-        const trackRegex = /\/track\/([^?]+)/;
+        const trackRegex = /:track:([^?]+)/;
         const trackMatch = trackRegex.exec(linkWithH1.href);
         if (trackMatch?.[1]) {
           urlToShare = `https://open.spotify.com/track/${trackMatch[1]}`;
