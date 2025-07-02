@@ -10,7 +10,7 @@ Enhance your shared music links with beautiful OGP images.
 ## ✨ Features
 
 - 🎨 **Beautiful OGP Images** - Automatically generate stunning Open Graph images for your shared music links
-- 🎵 **Music Service Integration** - Currently supports YouTube Music with more platforms coming soon
+- 🎵 **Music Service Integration** - Currently supports YouTube Music and Spotify
 - 🔗 **One-Click Sharing** - Simply click the "Now Playing" button to share your current track
 
 ## 📦 Installation
@@ -21,7 +21,7 @@ Unzip donwloaded file, and load extension on your browser (You might need to ena
 
 ## 🚀 Usage
 
-Just push "Now Playing" button on your music player (Currently, only YouTube Music is supported).
+Just push "Now Playing" button on your music player (Currently, YouTube Music and Spotify are supported).
 
 ## 🐛 Bug report
 
