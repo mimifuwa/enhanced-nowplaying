@@ -1,8 +1,10 @@
-import { NextRequest } from "next/server";
-import satori from "satori";
-import React from "react";
 import fs from "fs";
 import path from "path";
+
+import React from "react";
+import satori from "satori";
+
+import type { NextRequest } from "next/server";
 
 interface VideoData {
   title: string;

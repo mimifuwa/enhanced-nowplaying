@@ -1,5 +1,6 @@
-import { Metadata } from "next";
 import Redirect from "./redirect";
+
+import type { Metadata } from "next";
 
 interface VideoData {
   title: string;

@@ -2,20 +2,23 @@ import React from "react";
 
 const EnhancedNowPlayingButton: React.FC = () => {
   const handleClick = () => {
-    const playerTitleLink = document.querySelector(
+    const playerTitleLink = document.querySelector<HTMLAnchorElement>(
       'a[data-sessionlink*="feature=player-title"]'
-    ) as HTMLAnchorElement;
+    );
     if (playerTitleLink?.href) {
-      const urlParams = new URLSearchParams(playerTitleLink.href.split("?")[1]);
-      const videoId = urlParams.get("v");
-      if (videoId) {
-        // vパラメータのみを使用し、余計なパラメータは除外
-        const cleanVideoId = videoId.split("&")[0];
-        const urlToShare = `https://music.youtube.com/watch?v=${cleanVideoId}`;
-        const shareUrl = `https://nowplaying.mimifuwa.cc/${encodeURIComponent(urlToShare)}`;
-        const shareText = `#NowPlaying ${shareUrl}`;
+      const urlParts = playerTitleLink.href.split("?");
+      if (urlParts.length > 1) {
+        const urlParams = new URLSearchParams(urlParts[1]);
+        const videoId = urlParams.get("v");
+        if (videoId) {
+          // vパラメータのみを使用し、余計なパラメータは除外
+          const cleanVideoId = videoId.split("&")[0];
+          const urlToShare = `https://music.youtube.com/watch?v=${cleanVideoId}`;
+          const shareUrl = `https://nowplaying.mimifuwa.cc/${encodeURIComponent(urlToShare)}`;
+          const shareText = `#NowPlaying ${shareUrl}`;
 
-        window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}`, "_blank");
+          window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(shareText)}`, "_blank");
+        }
       }
     }
   };

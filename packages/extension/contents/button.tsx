@@ -1,7 +1,9 @@
+import { createRoot } from "react-dom/client";
+
 import EnhancedNowPlayingButton from "@/components/enhanced-nowplaying-button";
+
 import type { PlasmoCSConfig, PlasmoCSUIJSXContainer, PlasmoCSUIProps, PlasmoRender } from "plasmo";
 import type { FC } from "react";
-import { createRoot } from "react-dom/client";
 
 export const config: PlasmoCSConfig = {
   matches: ["https://music.youtube.com/*"],
