@@ -27,6 +27,9 @@ const PlasmoOverlay: FC<PlasmoCSUIProps> = () => {
 };
 
 export const render: PlasmoRender<PlasmoCSUIJSXContainer> = async ({ createRootContainer }) => {
+  if (!createRootContainer) {
+    return;
+  }
   const rootContainer = await createRootContainer();
   const root = createRoot(rootContainer);
   root.render(<PlasmoOverlay />);
