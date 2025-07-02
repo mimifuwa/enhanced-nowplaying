@@ -4,6 +4,9 @@ import path from "path";
 import React from "react";
 import satori from "satori";
 
+import { MusicServiceFactory } from "../../../services/music-service-factory";
+
+import type { TrackData } from "../../../types/music-service";
 import type { NextRequest } from "next/server";
 
 interface VideoData {
@@ -11,6 +14,8 @@ interface VideoData {
   channelTitle: string;
   thumbnail: string;
   description: string;
+  serviceName: string;
+  serviceIcon: string;
 }
 
 export async function GET(request: NextRequest) {
@@ -22,12 +27,22 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const videoId = extractVideoId(url);
-    if (!videoId) {
-      return new Response("Invalid YouTube URL", { status: 400 });
+    const provider = MusicServiceFactory.detectServiceFromUrl(url);
+    if (!provider) {
+      return new Response("Unsupported music service URL", { status: 400 });
     }
 
-    const videoData = await fetchVideoData(videoId);
+    const trackId = provider.extractId(url);
+    if (!trackId) {
+      return new Response("Invalid music service URL", { status: 400 });
+    }
+
+    const trackData = await provider.fetchTrackData(trackId);
+    const videoData = convertTrackToVideoData(
+      trackData,
+      provider.getServiceName(),
+      provider.getServiceIcon()
+    );
 
     // 画像がない場合はデフォルト画像を使用
     if (!videoData.thumbnail) {
@@ -187,7 +202,7 @@ export async function GET(request: NextRequest) {
                 },
               },
               React.createElement("img", {
-                src: `${process.env.BASE_URL}/icons/yt.svg`,
+                src: `${process.env.BASE_URL}${videoData.serviceIcon}`,
                 alt: "#NowPlaying",
                 style: {
                   width: "56px",
@@ -203,7 +218,7 @@ export async function GET(request: NextRequest) {
                     marginLeft: "10px",
                   },
                 },
-                "from YouTube Music"
+                `from ${videoData.serviceName}`
               )
             )
           )
@@ -230,53 +245,18 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function extractVideoId(url: string): string | null {
-  const patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|music\.youtube\.com\/watch\?v=)([^&\n?#]+)/,
-  ];
-
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) {
-      return match[1];
-    }
-  }
-
-  return null;
-}
-
-async function fetchVideoData(videoId: string): Promise<VideoData> {
-  const apiKey = process.env.YOUTUBE_DATA_API_KEY;
-  if (!apiKey) {
-    throw new Error("YouTube Data API key is not configured");
-  }
-
-  const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${apiKey}&part=snippet`;
-
-  const response = await fetch(apiUrl);
-  if (!response.ok) {
-    throw new Error(`YouTube API request failed: ${response.status}`);
-  }
-
-  const data = await response.json();
-
-  if (!data.items || data.items.length === 0) {
-    throw new Error("Video not found");
-  }
-
-  const video = data.items[0];
-  const snippet = video.snippet;
-
+function convertTrackToVideoData(
+  trackData: TrackData,
+  serviceName: string,
+  serviceIcon: string
+): VideoData {
   return {
-    title: snippet.title || "Unknown Title",
-    channelTitle: snippet.channelTitle || "Unknown Artist",
-    thumbnail:
-      snippet.thumbnails?.maxres?.url ||
-      snippet.thumbnails?.high?.url ||
-      snippet.thumbnails?.medium?.url ||
-      snippet.thumbnails?.default?.url ||
-      "",
-    description: snippet.description || "",
+    title: trackData.title,
+    channelTitle: trackData.artist,
+    thumbnail: trackData.thumbnail,
+    description: trackData.description || "",
+    serviceName,
+    serviceIcon,
   };
 }
 
