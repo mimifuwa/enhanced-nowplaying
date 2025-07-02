@@ -2,29 +2,41 @@ import Redirect from "./redirect";
 
 import type { Metadata } from "next";
 
-interface VideoData {
+interface MusicData {
   title: string;
-  channelTitle: string;
+  artist: string;
   thumbnail: string;
   description: string;
+  service: "youtube" | "spotify";
 }
 
-function extractVideoId(url: string): string | null {
-  const patterns = [
+function extractMusicId(url: string): { id: string; service: "youtube" | "spotify" } | null {
+  // YouTube Music patterns
+  const youtubePatterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|music\.youtube\.com\/watch\?v=)([^&\n?#]+)/,
   ];
 
-  for (const pattern of patterns) {
+  for (const pattern of youtubePatterns) {
     const match = url.match(pattern);
     if (match) {
-      return match[1];
+      return { id: match[1], service: "youtube" };
+    }
+  }
+
+  // Spotify patterns
+  const spotifyPatterns = [/(?:open\.spotify\.com\/track\/)([^?]+)/];
+
+  for (const pattern of spotifyPatterns) {
+    const match = url.match(pattern);
+    if (match) {
+      return { id: match[1], service: "spotify" };
     }
   }
 
   return null;
 }
 
-async function fetchVideoData(videoId: string): Promise<VideoData> {
+async function fetchYouTubeData(videoId: string): Promise<MusicData> {
   const apiKey = process.env.YOUTUBE_DATA_API_KEY;
   if (!apiKey) {
     throw new Error("YouTube Data API key is not configured");
@@ -48,7 +60,7 @@ async function fetchVideoData(videoId: string): Promise<VideoData> {
 
   return {
     title: snippet.title || "Unknown Title",
-    channelTitle: snippet.channelTitle || "Unknown Artist",
+    artist: snippet.channelTitle || "Unknown Artist",
     thumbnail:
       snippet.thumbnails?.maxres?.url ||
       snippet.thumbnails?.high?.url ||
@@ -56,7 +68,63 @@ async function fetchVideoData(videoId: string): Promise<VideoData> {
       snippet.thumbnails?.default?.url ||
       "",
     description: snippet.description || "",
+    service: "youtube",
   };
+}
+
+async function fetchSpotifyData(trackId: string): Promise<MusicData> {
+  const clientId = process.env.SPOTIFY_CLIENT_ID;
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+    throw new Error("Spotify API credentials are not configured");
+  }
+
+  // Get access token
+  const authResponse = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`,
+    },
+    body: "grant_type=client_credentials",
+  });
+
+  if (!authResponse.ok) {
+    throw new Error(`Spotify auth failed: ${authResponse.status}`);
+  }
+
+  const authData = await authResponse.json();
+  const accessToken = authData.access_token;
+
+  // Get track data
+  const trackResponse = await fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!trackResponse.ok) {
+    throw new Error(`Spotify API request failed: ${trackResponse.status}`);
+  }
+
+  const trackData = await trackResponse.json();
+
+  return {
+    title: trackData.name || "Unknown Title",
+    artist: trackData.artists?.[0]?.name || "Unknown Artist",
+    thumbnail: trackData.album?.images?.[0]?.url || "",
+    description: `${trackData.name} by ${trackData.artists?.[0]?.name}`,
+    service: "spotify",
+  };
+}
+
+async function fetchMusicData(musicId: string, service: "youtube" | "spotify"): Promise<MusicData> {
+  if (service === "youtube") {
+    return fetchYouTubeData(musicId);
+  } else {
+    return fetchSpotifyData(musicId);
+  }
 }
 
 export async function generateMetadata({
@@ -67,41 +135,41 @@ export async function generateMetadata({
   try {
     // paramsをawait
     const { slug } = await params;
-    // slugをデコードしてYouTube URLを取得
-    const youtubeMusicUrl = decodeURIComponent(slug);
-    const videoId = extractVideoId(youtubeMusicUrl);
+    // slugをデコードして音楽URLを取得
+    const musicUrl = decodeURIComponent(slug);
+    const musicInfo = extractMusicId(musicUrl);
 
-    if (!videoId) {
+    if (!musicInfo) {
       return {
-        title: "Invalid YouTube Music URL",
-        description: "The provided URL is not a valid YouTube Music URL.",
+        title: "Invalid Music URL",
+        description: "The provided URL is not a valid YouTube Music or Spotify URL.",
       };
     }
 
-    const videoData = await fetchVideoData(videoId);
+    const musicData = await fetchMusicData(musicInfo.id, musicInfo.service);
     const baseUrl = process.env.BASE_URL || "http://localhost:3000";
-    const ogImageUrl = `${baseUrl}/api/nowplaying?url=${encodeURIComponent(youtubeMusicUrl)}`;
+    const ogImageUrl = `${baseUrl}/api/nowplaying?url=${encodeURIComponent(musicUrl)}`;
 
     return {
-      title: `${videoData.title} - ${videoData.channelTitle}`,
-      description: `Now Playing: ${videoData.title} by ${videoData.channelTitle}`,
+      title: `${musicData.title} - ${musicData.artist}`,
+      description: `Now Playing: ${musicData.title} by ${musicData.artist}`,
       openGraph: {
-        title: `${videoData.title} - ${videoData.channelTitle}`,
-        description: `Now Playing: ${videoData.title} by ${videoData.channelTitle}`,
+        title: `${musicData.title} - ${musicData.artist}`,
+        description: `Now Playing: ${musicData.title} by ${musicData.artist}`,
         images: [
           {
             url: ogImageUrl,
             width: 1200,
             height: 630,
-            alt: `${videoData.title} by ${videoData.channelTitle}`,
+            alt: `${musicData.title} by ${musicData.artist}`,
           },
         ],
         type: "website",
       },
       twitter: {
         card: "summary_large_image",
-        title: `${videoData.title} - ${videoData.channelTitle}`,
-        description: `Now Playing: ${videoData.title} by ${videoData.channelTitle}`,
+        title: `${musicData.title} - ${musicData.artist}`,
+        description: `Now Playing: ${musicData.title} by ${musicData.artist}`,
         images: [ogImageUrl],
       },
     };
@@ -109,7 +177,7 @@ export async function generateMetadata({
     console.error("Error generating metadata:", error);
     return {
       title: "Error loading song",
-      description: "Failed to load the YouTube Music track.",
+      description: "Failed to load the music track.",
     };
   }
 }
@@ -117,9 +185,9 @@ export async function generateMetadata({
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   // paramsをawait
   const { slug } = await params;
-  // slugをデコードしてYouTube URLを取得
-  const youtubeMusicUrl = decodeURIComponent(slug);
+  // slugをデコードして音楽URLを取得
+  const musicUrl = decodeURIComponent(slug);
 
-  // クライアントサイドでYouTube Music URLにリダイレクト
-  return <Redirect url={youtubeMusicUrl} />;
+  // クライアントサイドで音楽URLにリダイレクト
+  return <Redirect url={musicUrl} />;
 }
